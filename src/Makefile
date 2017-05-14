@@ -4,7 +4,7 @@ CC = gcc
 LD = $(CC)
 
 SOURCE_C = $(wildcard *.c)
-OBJECTS_C = $(patsubst %.c, %_c.o, $(SOURCE_C))
+OBJECTS_C = $(patsubst %.c, %.o, $(SOURCE_C))
 
 CFLAGS = -std=c99 -Wall -pedantic -O3
 EXECUTABLE = ../bin/ising.e
@@ -26,7 +26,7 @@ executable: $(EXECUTABLE)
 
 all: objects executable
 
-%_c.o: %.c
+%.o: %.c
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 %.e: $(OBJECTS_C)
