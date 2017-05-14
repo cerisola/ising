@@ -1,0 +1,4 @@
+/bin/
+*.o
+print/
+__pycache__
