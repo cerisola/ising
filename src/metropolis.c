@@ -10,7 +10,7 @@ int pick_site(int * lattice, int n)
     return 0;
 }
 
-int flip(int * lattice, int n, float T)
+int flip(int * lattice, int n, float T, int site)
 {
     return 0;
 }
