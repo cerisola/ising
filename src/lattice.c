@@ -1,5 +1,6 @@
 #include "lattice.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 int fill_lattice(int * lattice, int n, float p)
 {
@@ -17,5 +18,15 @@ int fill_lattice(int * lattice, int n, float p)
 
 int print_lattice(int * lattice, int n)
 {
-  return 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            putchar(lattice[i*n + j] > 0 ? '+' : '-');
+            if (j < n-1) {
+                putchar(' ');
+            } else {
+                putchar('\n');
+            }
+        }
+    }
+    return 0;
 }
