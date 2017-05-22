@@ -4,12 +4,8 @@
 
 int metropolis(int * lattice, int n, float T)
 {
-    int niter = 20 * (n*n);
-    int site;
-    for (int i = 0; i < niter; i++) {
-        site = pick_site(lattice, n);
-        flip(lattice, n, T, site);
-    }
+    int site = pick_site(lattice, n);
+    flip(lattice, n, T, site);
     return 0;
 }
 
