@@ -29,5 +29,7 @@ int main(int argc, char ** argv)
     print_lattice(lattice, n);
     printf("<M> = %f \t\t <E> = %f\n", Mavg, Eavg);
 
+    free(lattice);
+
     return 0;
 }
