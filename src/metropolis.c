@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-int metropolis(int * lattice, int n, float T)
+int metropolis(int * lattice, int n, double T)
 {
     int site = pick_site(lattice, n);
     flip(lattice, n, T, site);
@@ -14,7 +14,7 @@ int pick_site(int * lattice, int n)
     return (int)(((double)rand())*n*n/RAND_MAX);
 }
 
-int flip(int * lattice, int n, float T, int site)
+int flip(int * lattice, int n, double T, int site)
 {
     int i = site / n;
     int j = site % n;

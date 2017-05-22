@@ -10,8 +10,8 @@ int main(int argc, char ** argv)
 {
     int n = 32;
     int * lattice = malloc(n * n * sizeof(int));
-    float prob = 0.5;
-    float T = 2.0;
+    double prob = 0.5;
+    double T = 2.0;
     int niter = 2000;
     srand(time(NULL));
 

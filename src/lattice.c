@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int fill_lattice(int * lattice, int n, float p)
+int fill_lattice(int * lattice, int n, double p)
 {
     double q;
     for (int i = 0; i < n*n; i++) {
