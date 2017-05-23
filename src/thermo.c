@@ -27,7 +27,7 @@ double get_transition_probability(int s, int sum_neighbours, const Parameters * 
     return parameters->transition_probabilities[(s + 1)/2][sum_neighbours/2 + 2];
 }
 
-double magnetization(int *lattice, int n)
+double magnetization(const int *lattice, int n)
 {
     double M = 0;
     for (int i = 0; i < n*n; i++) {
@@ -36,7 +36,7 @@ double magnetization(int *lattice, int n)
     return M/(n*n);
 }
 
-int site_interaction_energy(int site, int *lattice, int n, const Parameters * parameters)
+int site_interaction_energy(int site, const int *lattice, int n, const Parameters * parameters)
 {
     int i = site / n;
     int j = site % n;
@@ -48,7 +48,7 @@ int site_interaction_energy(int site, int *lattice, int n, const Parameters * pa
     return siteE;
 }
 
-double energy(int *lattice, int n, const Parameters * parameters)
+double energy(const int *lattice, int n, const Parameters * parameters)
 {
     double E = 0;
     for (int i = 0; i < n*n; i++) {
@@ -57,7 +57,7 @@ double energy(int *lattice, int n, const Parameters * parameters)
     return E/(n*n);
 }
 
-int set_thermodynamic_quantities(int * lattice, int n, const Parameters * parameters, ThermodynamicQuantities * quantities)
+int set_thermodynamic_quantities(const int * lattice, int n, const Parameters * parameters, ThermodynamicQuantities * quantities)
 {
     quantities->E = energy(lattice, n, parameters);
     quantities->M = magnetization(lattice, n);

@@ -16,9 +16,9 @@ typedef struct {
     double M;
 } ThermodynamicQuantities;
 
-double magnetization(int * lattice, int n);
-double energy(int * lattice, int n, const Parameters * parameters);
-int set_thermodynamic_quantities(int * lattice, int n, const Parameters * parameters, ThermodynamicQuantities * quantities);
-int update_thermodynamic_quantities(int new_site, int sum_neighbours, int n, const Parameters * parameters, ThermodynamicQuantities * quantities);
+double magnetization(const int * lattice, int n);
+double energy(const int * lattice, int n, const Parameters * parameters);
+int set_thermodynamic_quantities(const int * lattice, int n, const Parameters * parameters, ThermodynamicQuantities * quantities);
+int update_thermodynamic_quantities(const int new_site, int sum_neighbours, int n, const Parameters * parameters, ThermodynamicQuantities * quantities);
 
 #endif //THERMO_H
