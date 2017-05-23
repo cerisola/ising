@@ -5,7 +5,7 @@
 int metropolis(int * lattice, int n, double T)
 {
     int site = pick_site(lattice, n);
-    flip(lattice, n, T, site);
+    flip(lattice, n, site, T);
     return 0;
 }
 
@@ -14,7 +14,7 @@ int pick_site(int * lattice, int n)
     return (int)(((double)rand())*n*n/RAND_MAX);
 }
 
-int flip(int * lattice, int n, double T, int site)
+int flip(int * lattice, int n, int site, double T)
 {
     int i = site / n;
     int j = site % n;
