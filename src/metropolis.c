@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <math.h>
 
-int metropolis(int * lattice, int n, const Parameters * parameters)
+int metropolis(int * lattice, int n, const Parameters * parameters, ThermodynamicQuantities * quantities)
 {
     int site = pick_site(lattice, n);
-    flip(lattice, n, site, parameters);
+    flip(lattice, n, site, parameters, quantities);
     return 0;
 }
 
@@ -14,7 +14,7 @@ int pick_site(int * lattice, int n)
     return (int)(((double)rand())*n*n/RAND_MAX);
 }
 
-int flip(int * lattice, int n, int site, const Parameters * parameters)
+int flip(int * lattice, int n, int site, const Parameters * parameters, ThermodynamicQuantities * quantities)
 {
     int i = site / n;
     int j = site % n;
@@ -26,6 +26,7 @@ int flip(int * lattice, int n, int site, const Parameters * parameters)
     double q = ((double)rand())/RAND_MAX;
     if (q < p) {
         lattice[site] = -lattice[site];
+        update_thermodynamic_quantities(lattice[site], sum_neighbours, n, parameters, quantities);
     }
     return 0;
 }

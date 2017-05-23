@@ -56,3 +56,18 @@ double energy(int *lattice, int n, const Parameters * parameters)
     }
     return E/(n*n);
 }
+
+int set_thermodynamic_quantities(int * lattice, int n, const Parameters * parameters, ThermodynamicQuantities * quantities)
+{
+    quantities->E = energy(lattice, n, parameters);
+    quantities->M = magnetization(lattice, n);
+    return 0;
+}
+
+int update_thermodynamic_quantities(int new_site, int sum_neighbours, int n, const Parameters * parameters, ThermodynamicQuantities * quantities)
+{
+    quantities->E += 2 * (parameters->J * sum_neighbours + parameters->B) * (-new_site) / (n*n);
+    quantities->M += 2.0 * new_site / (n*n);
+    return 0;
+}
+

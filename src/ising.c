@@ -20,13 +20,15 @@ int main(int argc, char ** argv)
     srand(time(NULL));
 
     fill_lattice(lattice, n, prob);
+    ThermodynamicQuantities quantities;
+    set_thermodynamic_quantities(lattice, n, &parameters, &quantities);
     double Mavg = 0;
     double Eavg = 0;
     for (int i = 0; i < niter; i++) {
-        metropolis(lattice, n, &parameters);
+        metropolis(lattice, n, &parameters, &quantities);
         if (i > 0 && i % nsep == 0) {
-            Mavg += fabs(magnetization(lattice, n));
-            Eavg += energy(lattice, n, &parameters);
+            Mavg += fabs(quantities.M);
+            Eavg += quantities.E;
         }
     }
     Mavg /= nsamples;
