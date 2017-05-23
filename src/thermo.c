@@ -36,7 +36,7 @@ double magnetization(int *lattice, int n)
     return M/(n*n);
 }
 
-int site_energy(int site, int *lattice, int n)
+int site_interaction_energy(int site, int *lattice, int n, const Parameters * parameters)
 {
     int i = site / n;
     int j = site % n;
@@ -44,16 +44,15 @@ int site_energy(int site, int *lattice, int n)
                          lattice[((i-1+n) % n)*n + j] +
                          lattice[i*n + ((j+1) % n)] +
                          lattice[i*n + ((j-1+n) % n)];
-    int siteE = - sum_neighbours * lattice[site];
+    int siteE = - parameters->J * sum_neighbours * lattice[site];
     return siteE;
 }
 
-double energy(int *lattice, int n)
+double energy(int *lattice, int n, const Parameters * parameters)
 {
     double E = 0;
     for (int i = 0; i < n*n; i++) {
-        E += site_energy(i, lattice, n);
+        E += site_interaction_energy(i, lattice, n, parameters)/2 + parameters->B * lattice[i];
     }
-    E /= 2;
     return E/(n*n);
 }

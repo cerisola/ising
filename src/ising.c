@@ -26,7 +26,7 @@ int main(int argc, char ** argv)
         metropolis(lattice, n, &parameters);
         if (i > 0 && i % nsep == 0) {
             Mavg += fabs(magnetization(lattice, n));
-            Eavg += energy(lattice, n);
+            Eavg += energy(lattice, n, &parameters);
         }
     }
     Mavg /= nsamples;
