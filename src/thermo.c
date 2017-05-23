@@ -58,7 +58,7 @@ double energy(const int * lattice, int n, const Parameters * parameters)
 {
     double E = 0;
     for (int i = 0; i < n*n; i++) {
-        E += site_interaction_energy(i, lattice, n, parameters)/2 + parameters->B * lattice[i];
+        E += site_interaction_energy(i, lattice, n, parameters)/2 - parameters->B * lattice[i];
     }
     return E/(n*n);
 }
