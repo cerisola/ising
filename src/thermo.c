@@ -2,6 +2,17 @@
 #include <stdlib.h>
 #include <math.h>
 
+int sum_neighbours_periodic_boundary_conditions(const int * lattice, int n, int site)
+{
+    int i = site / n;
+    int j = site % n;
+    int sum_neighbours = lattice[((i+1) % n)*n + j] +
+                         lattice[((i-1+n) % n)*n + j] +
+                         lattice[i*n + ((j+1) % n)] +
+                         lattice[i*n + ((j-1+n) % n)];
+    return sum_neighbours;
+}
+
 int calculate_transition_probabilities(Parameters * parameters)
 {
     double deltaE_0 = -8 * parameters->J + 2 * parameters->B;
@@ -38,12 +49,7 @@ double magnetization(const int *lattice, int n)
 
 int site_interaction_energy(int site, const int * lattice, int n, const Parameters * parameters)
 {
-    int i = site / n;
-    int j = site % n;
-    int sum_neighbours = lattice[((i+1) % n)*n + j] +
-                         lattice[((i-1+n) % n)*n + j] +
-                         lattice[i*n + ((j+1) % n)] +
-                         lattice[i*n + ((j-1+n) % n)];
+    int sum_neighbours = sum_neighbours_periodic_boundary_conditions(lattice, n, site);
     int siteE = - parameters->J * sum_neighbours * lattice[site];
     return siteE;
 }

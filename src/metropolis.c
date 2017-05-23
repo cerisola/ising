@@ -16,12 +16,7 @@ int pick_site(int * lattice, int n)
 
 int flip(int * lattice, int n, int site, const Parameters * parameters, ThermodynamicQuantities * quantities)
 {
-    int i = site / n;
-    int j = site % n;
-    int sum_neighbours = lattice[((i+1) % n)*n + j] +
-                         lattice[((i-1+n) % n)*n + j] +
-                         lattice[i*n + ((j+1) % n)] +
-                         lattice[i*n + ((j-1+n) % n)];
+    int sum_neighbours = sum_neighbours_periodic_boundary_conditions(lattice, n, site);
     double p = get_transition_probability(lattice[site], sum_neighbours, parameters);
     double q = ((double)rand())/RAND_MAX;
     if (q < p) {

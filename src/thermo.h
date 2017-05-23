@@ -1,6 +1,8 @@
 #ifndef THERMO_H
 #define THERMO_H
 
+int sum_neighbours_periodic_boundary_conditions(const int * lattice, int n, int site);
+
 typedef struct {
     double T;
     double J;
