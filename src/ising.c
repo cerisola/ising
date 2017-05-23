@@ -9,17 +9,33 @@
 
 int main(int argc, char ** argv)
 {
-    int n = 32;
-    int * lattice = malloc(n * n * sizeof(int));
-    double prob = 0.5;
-    Parameters parameters = { .T = 2.0, .J = 1.0, .B = 0.0 };
-    calculate_transition_probabilities(&parameters);
-    int nsamples = 2000;
-    int nsep = 20 * n*n;
-    int niter = (nsamples + 1) * nsep;
-    srand(time(NULL));
+    /* read input arguments; if none provided fallback to default values */
+    if (argc < 6) {
+        printf("usage: n T J B nsamples (seed)\n");
+        return 1;
+    }
+    unsigned int random_seed;
+    if (argc == 7) {
+        random_seed = atoi(argv[6]);
+    } else {
+        random_seed = (unsigned int)time(NULL);
+    }
 
+    int n = atoi(argv[1]);
+    int * lattice = malloc(n * n * sizeof(int));
+
+    Parameters parameters = { .T = atof(argv[2]), .J = atof(argv[3]), .B = atof(argv[4]) };
+    calculate_transition_probabilities(&parameters);
+
+    int nsep = 20 * n*n;
+    int nsamples = atoi(argv[5]);
+    int niter = (nsamples + 1) * nsep;
+
+    srand(random_seed);
+
+    double prob = 0.5;
     fill_lattice(lattice, n, prob);
+
     ThermodynamicQuantities quantities;
     set_thermodynamic_quantities(lattice, n, &parameters, &quantities);
     double Mavg = 0;
