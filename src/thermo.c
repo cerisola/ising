@@ -36,7 +36,7 @@ double magnetization(const int *lattice, int n)
     return M/(n*n);
 }
 
-int site_interaction_energy(int site, const int *lattice, int n, const Parameters * parameters)
+int site_interaction_energy(int site, const int * lattice, int n, const Parameters * parameters)
 {
     int i = site / n;
     int j = site % n;
@@ -48,7 +48,7 @@ int site_interaction_energy(int site, const int *lattice, int n, const Parameter
     return siteE;
 }
 
-double energy(const int *lattice, int n, const Parameters * parameters)
+double energy(const int * lattice, int n, const Parameters * parameters)
 {
     double E = 0;
     for (int i = 0; i < n*n; i++) {
