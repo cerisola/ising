@@ -18,8 +18,7 @@ int flip(int * lattice, int n, int site, const Parameters * parameters, Thermody
 {
     int sum_neighbours = sum_neighbours_periodic_boundary_conditions(lattice, n, site);
     double p = get_transition_probability(lattice[site], sum_neighbours, parameters);
-    double q = ((double)rand())/RAND_MAX;
-    if (q < p) {
+    if (p > 1 || rand() < p*RAND_MAX) {
         lattice[site] = -lattice[site];
         update_thermodynamic_quantities(lattice[site], sum_neighbours, n, parameters, quantities);
     }
