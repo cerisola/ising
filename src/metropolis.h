@@ -1,8 +1,10 @@
 #ifndef METROPOLIS_H
 #define METROPOLIS_H
 
-int metropolis(int * lattice, int n, double T);
+#include "thermo.h"
+
+int metropolis(int * lattice, int n, const Parameters * parameters);
 int pick_site(int * lattice, int n);
-int flip(int * lattice, int n, int site, double T);
+int flip(int * lattice, int n, int site, const Parameters * parameters);
 
 #endif

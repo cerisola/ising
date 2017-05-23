@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <math.h>
 
-int metropolis(int * lattice, int n, double T)
+int metropolis(int * lattice, int n, const Parameters * parameters)
 {
     int site = pick_site(lattice, n);
-    flip(lattice, n, site, T);
+    flip(lattice, n, site, parameters);
     return 0;
 }
 
@@ -14,7 +14,7 @@ int pick_site(int * lattice, int n)
     return (int)(((double)rand())*n*n/RAND_MAX);
 }
 
-int flip(int * lattice, int n, int site, double T)
+int flip(int * lattice, int n, int site, const Parameters * parameters)
 {
     int i = site / n;
     int j = site % n;
@@ -22,8 +22,7 @@ int flip(int * lattice, int n, int site, double T)
                          lattice[((i-1+n) % n)*n + j] +
                          lattice[i*n + ((j+1) % n)] +
                          lattice[i*n + ((j-1+n) % n)];
-    int deltaE = 2 * sum_neighbours * lattice[site];
-    double p = exp(-deltaE/T);
+    double p = get_transition_probability(lattice[site], sum_neighbours, parameters);
     double q = ((double)rand())/RAND_MAX;
     if (q < p) {
         lattice[site] = -lattice[site];

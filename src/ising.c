@@ -12,7 +12,8 @@ int main(int argc, char ** argv)
     int n = 32;
     int * lattice = malloc(n * n * sizeof(int));
     double prob = 0.5;
-    double T = 2.0;
+    Parameters parameters = { .T = 2.0, .J = 1.0, .B = 0.0 };
+    calculate_transition_probabilities(&parameters);
     int nsamples = 2000;
     int nsep = 20 * n*n;
     int niter = (nsamples + 1) * nsep;
@@ -22,7 +23,7 @@ int main(int argc, char ** argv)
     double Mavg = 0;
     double Eavg = 0;
     for (int i = 0; i < niter; i++) {
-        metropolis(lattice, n, T);
+        metropolis(lattice, n, &parameters);
         if (i > 0 && i % nsep == 0) {
             Mavg += fabs(magnetization(lattice, n));
             Eavg += energy(lattice, n);

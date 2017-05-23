@@ -1,4 +1,31 @@
 #include "thermo.h"
+#include <stdlib.h>
+#include <math.h>
+
+int calculate_transition_probabilities(Parameters * parameters)
+{
+    double deltaE_0 = -8 * parameters->J + 2 * parameters->B;
+    double deltaE_1 = -4 * parameters->J + 2 * parameters->B;
+    double deltaE_2 = 2 * parameters->B;
+    double deltaE_3 = 4 * parameters->J + 2 * parameters->B;
+    double deltaE_4 = 8 * parameters->J + 2 * parameters->B;
+    parameters->transition_probabilities[0][0] = exp(+ deltaE_0 / parameters->T);
+    parameters->transition_probabilities[0][1] = exp(+ deltaE_1 / parameters->T);
+    parameters->transition_probabilities[0][2] = exp(+ deltaE_2 / parameters->T);
+    parameters->transition_probabilities[0][3] = exp(+ deltaE_3 / parameters->T);
+    parameters->transition_probabilities[0][4] = exp(+ deltaE_4 / parameters->T);
+    parameters->transition_probabilities[1][0] = exp(- deltaE_0 / parameters->T);
+    parameters->transition_probabilities[1][1] = exp(- deltaE_1 / parameters->T);
+    parameters->transition_probabilities[1][2] = exp(- deltaE_2 / parameters->T);
+    parameters->transition_probabilities[1][3] = exp(- deltaE_3 / parameters->T);
+    parameters->transition_probabilities[1][4] = exp(- deltaE_4 / parameters->T);
+    return 0;
+}
+
+double get_transition_probability(int s, int sum_neighbours, const Parameters * parameters)
+{
+    return parameters->transition_probabilities[(s + 1)/2][sum_neighbours/2 + 2];
+}
 
 double magnetization(int *lattice, int n)
 {
