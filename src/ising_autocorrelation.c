@@ -4,6 +4,7 @@
 #include <time.h>
 #include <float.h>
 
+#include "random.h"
 #include "metropolis.h"
 #include "lattice.h"
 #include "thermo.h"
@@ -42,7 +43,7 @@ int main(int argc, char ** argv)
     int nsteps = atoi(argv[5]);
     int nsamples = atoi(argv[6]);
 
-    srand(random_seed);
+    pcg32_srand(random_seed);
 
     double prob = 0.5;
     fill_lattice(lattice, n, prob);

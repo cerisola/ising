@@ -1,12 +1,13 @@
 #include "lattice.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "random.h"
 
 int fill_lattice(int * lattice, int n, double p)
 {
     double q;
     for (int i = 0; i < n*n; i++) {
-        q = ((double)rand())/RAND_MAX;
+        q = ((double)pcg32_random())/PCG32_RAND_MAX;
         if (q < p) {
             lattice[i] = 1;
         } else {
