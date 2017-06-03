@@ -8,6 +8,7 @@
 #include "lattice.h"
 #include "thermo.h"
 #include "math_extra.h"
+#include "io_helpers.h"
 
 int main(int argc, char ** argv)
 {
@@ -84,6 +85,10 @@ int main(int argc, char ** argv)
 
         printf("Finished T_%d out of %d\n", i+1, npoints);
     }
+
+    write_thermodynamic_quantities_temperature_sweep(argv[10],
+            Tvalues, npoints, nsamples, Mavg, Eavg, Mvar, Evar, nsep, n,
+            random_seed);
 
     free(Mavg);
     free(Eavg);
