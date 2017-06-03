@@ -60,7 +60,8 @@ int main(int argc, char ** argv)
     double * Evar = malloc(npoints * sizeof(*Evar));
 
     double * Tvalues = create_linear_grid(Tmin, Tmax, npoints, rounding);
-    for (int i = 0; i < npoints; i++) {
+    for (int j = 0; j < npoints; j++) {
+        int i = npoints - 1 - j;
         parameters.T = Tvalues[i];
         calculate_transition_probabilities(&parameters);
         set_thermodynamic_quantities(lattice, n, &parameters, &quantities);
@@ -83,7 +84,7 @@ int main(int argc, char ** argv)
         Mavg[i] /= nsamples;
         Eavg[i] /= nsamples;
 
-        printf("Finished T_%d out of %d\n", i+1, npoints);
+        printf("Finished T_%d out of %d\n", j+1, npoints);
     }
 
     write_thermodynamic_quantities_temperature_sweep(argv[10],
