@@ -40,7 +40,7 @@ int main(int argc, char ** argv)
 
     double Tmin = atof(argv[2]);
     double Tmax = atof(argv[3]);
-    Parameters parameters = { .T = atof(argv[2]), .J = atof(argv[4]), .B = atof(argv[5]) };
+    Parameters parameters = { .T = Tmax, .J = atof(argv[4]), .B = atof(argv[5]) };
 
     int npoints = atoi(argv[6]);
     int rounding = atoi(argv[7]);
@@ -58,6 +58,13 @@ int main(int argc, char ** argv)
     double * Eavg = malloc(npoints * sizeof(*Eavg));
     double * Mvar = malloc(npoints * sizeof(*Mvar));
     double * Evar = malloc(npoints * sizeof(*Evar));
+
+    calculate_transition_probabilities(&parameters);
+    set_thermodynamic_quantities(lattice, n, &parameters, &quantities);
+    int ntherm = 10 * nsep;
+    for (int i = 0; i < ntherm; i++) {
+        metropolis(lattice, n, &parameters, &quantities);
+    }
 
     double * Tvalues = create_linear_grid(Tmin, Tmax, npoints, rounding);
     for (int j = 0; j < npoints; j++) {
