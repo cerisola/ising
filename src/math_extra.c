@@ -23,3 +23,14 @@ double * create_linear_grid(const double xmin, const double xmax,
 
     return grid;
 }
+
+int update_online_mean_variance(double new_value, int n, double * mean, double * variance)
+{
+    double delta = new_value - (*mean);
+    (*mean) += delta / n;
+
+    double delta2 = new_value - (*mean);
+    (*variance) += delta * delta2;
+
+    return 0;
+}

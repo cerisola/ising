@@ -32,4 +32,25 @@
 double * create_linear_grid(const double xmin, const double xmax,
                             const int npoints, const int round_digits);
 
+
+/*! Update the mean and variance for an online sampling process.
+
+    This function updates the values of the sample mean and variance from an
+    online sampling process.
+
+    @param new_value the new value to be used to update statistics.
+    @param n the number of the new sample.
+    @param mean where the mean is stored. On function call it contains the old
+        estimate of the mean and therefore on the first call should be initialized
+        to 0. On function return in contains the updated value. The returned value is
+        unnormalized and should be divided by the total number of observations at the end
+        of the sampling process.
+    @param variance where the variance is stored. On function call it contains the old
+        estimate of the variance and therefore on the first call should be initialized
+        to 0. On function return in contains the updated value. The returned value is
+        unnormalized and should be divided by the total number of observations at the end
+        of the sampling process.
+*/
+int update_online_mean_variance(double new_value, int n, double * mean, double * variance);
+
 #endif /* MATH_EXTRA_H */

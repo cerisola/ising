@@ -80,16 +80,14 @@ int main(int argc, char ** argv)
         for (int j = 0; j < niter; j++) {
             metropolis(lattice, n, &parameters, &quantities);
             if (j > 0 && j % nsep == 0) {
-                Mavg[i] += quantities.M;
-                Eavg[i] += quantities.E;
-                Mvar[i] += quantities.M * quantities.M;
-                Evar[i] += quantities.E * quantities.E;
+                update_online_mean_variance(quantities.M, j / nsep, Mavg + i, Mvar + i);
+                update_online_mean_variance(quantities.E, j / nsep, Eavg + i, Evar + i);
             }
         }
-        Mvar[i] = (Mvar[i] - (Mavg[i] * Mavg[i])/nsamples)/(nsamples - 1);
-        Evar[i] = (Evar[i] - (Eavg[i] * Eavg[i])/nsamples)/(nsamples - 1);
         Mavg[i] /= nsamples;
         Eavg[i] /= nsamples;
+        Mvar[i] /= nsamples - 1;
+        Evar[i] /= nsamples - 1;
 
         printf("Finished T_%d out of %d\n", j+1, npoints);
     }
