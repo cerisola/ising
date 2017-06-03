@@ -36,7 +36,8 @@ int main(int argc, char ** argv)
     int n = atoi(argv[1]);
     int * lattice = malloc(n * n * sizeof(int));
 
-    Parameters parameters = { .T = atof(argv[2]), .J = atof(argv[3]), .B = atof(argv[4]) };
+    double T = atof(argv[2]);
+    Parameters parameters = { .T = T, .J = atof(argv[3]), .B = atof(argv[4]) };
 
     int nsteps = atoi(argv[5]);
     int nsamples = atoi(argv[6]);
@@ -103,6 +104,8 @@ int main(int argc, char ** argv)
         Mcor[i] = Mcor[i] / accum - Mavg * Mavg;
         Ecor[i] = Ecor[i] / accum - Eavg * Eavg;
     }
+
+    write_autocorrelation_values(argv[7], Mcor, Ecor, nsteps, nsamples, T, n, random_seed);
 
     free(Mval);
     free(Eval);

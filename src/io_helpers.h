@@ -39,4 +39,21 @@ void write_thermodynamic_quantities_temperature_sweep(const char * path,
         const double * Mavg, const double * Eavg, const double * Mvar,
         const double * Evar, int nsep, int L, unsigned int seed);
 
+/*! Write autocorrelation values to file.
+
+    @param path path to the folder where the data will be written. If the file
+        exists it will be overwritten.
+    @param Mcor autocorrelation values of the magnetization.
+    @param Ecor autocorrelation values of the energy.
+    @param nsteps maximum number of steps used to calculate the autocorrelation.
+    @param nsamples the number of samples taken at each step separation.
+    @param T temperature used.
+    @param L the linear size of the lattice.
+    @param seed the random number generator seed used at the beginning of the
+        probability sweep.
+*/
+void write_autocorrelation_values(const char * path, const double * Mcor,
+        const double * Ecor, int nsteps, int nsamples, double T, int L,
+        unsigned int seed);
+
 #endif /* IO_HELPERS_H */
