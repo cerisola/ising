@@ -62,37 +62,36 @@ int main(int argc, char ** argv)
         metropolis(lattice, n, &parameters, &quantities);
     }
 
-    int niter = nsteps * (nsamples + 1);
+    for (int i = 0; i < nsteps; i++) {
+        metropolis(lattice, n, &parameters, &quantities);
+        Mval[i] = quantities.M;
+        Eval[i] = quantities.E;
+        Mcor[i] = 0;
+        Ecor[i] = 0;
+    }
+
     unsigned int accum = 0;
-    for (int i = 0; i < niter; i++) {
+    for (int i = 0; i < nsamples; i++) {
         metropolis(lattice, n, &parameters, &quantities);
 
-        if (i < nsteps) {
-            int j = nsteps - 1 - i;
-            Mval[j] = quantities.M;
-            Eval[j] = quantities.E;
-            Mcor[j] = 0;
-            Ecor[j] = 0;
-        } else {
-            accum++;
-            Mavg += quantities.M;
-            Eavg += quantities.E;
-            Mcor[0] += quantities.M * quantities.M;
-            Ecor[0] += quantities.E * quantities.E;
-            for (int j = 1; j < nsteps; j++) {
-                Mcor[j] += Mval[j] * quantities.M;
-                Ecor[j] += Eval[j] * quantities.E;
-            }
-            for (int j = 0; j < nsteps-1; j++) {
-                Mval[j] = Mval[j+1];
-                Eval[j] = Eval[j+1];
-            }
-            Mval[nsteps-1] = quantities.M;
-            Eval[nsteps-1] = quantities.E;
+        accum++;
+        Mavg += quantities.M;
+        Eavg += quantities.E;
+        Mcor[0] += quantities.M * quantities.M;
+        Ecor[0] += quantities.E * quantities.E;
+        for (int j = 1; j < nsteps; j++) {
+            Mcor[j] += Mval[j] * quantities.M;
+            Ecor[j] += Eval[j] * quantities.E;
         }
+        for (int j = 0; j < nsteps-1; j++) {
+            Mval[j] = Mval[j+1];
+            Eval[j] = Eval[j+1];
+        }
+        Mval[nsteps-1] = quantities.M;
+        Eval[nsteps-1] = quantities.E;
 
-        if (i > 0 && i % (niter/100) == 0) {
-            printf("Finished iter %d out of %d\n", i+1, niter);
+        if (i > 0 && i % (nsamples/100) == 0) {
+            printf("Finished iter %d out of %d\n", i+1, nsamples);
         }
     }
 
