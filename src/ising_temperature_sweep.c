@@ -7,6 +7,7 @@
 #include "metropolis.h"
 #include "lattice.h"
 #include "thermo.h"
+#include "math_extra.h"
 
 int main(int argc, char ** argv)
 {
@@ -56,8 +57,9 @@ int main(int argc, char ** argv)
     double * Mvar = malloc(npoints * sizeof(*Mvar));
     double * Evar = malloc(npoints * sizeof(*Evar));
 
+    double * Tvalues = create_linear_grid(Tmin, Tmax, npoints, 0);
     for (int i = 0; i < npoints; i++) {
-        parameters.T = Tmin + i*(Tmax - Tmin)/(npoints-1);
+        parameters.T = Tvalues[i];
         calculate_transition_probabilities(&parameters);
         set_thermodynamic_quantities(lattice, n, &parameters, &quantities);
 
@@ -86,6 +88,7 @@ int main(int argc, char ** argv)
     free(Eavg);
     free(Mvar);
     free(Evar);
+    free(Tvalues);
     free(lattice);
 
     return 0;
