@@ -50,6 +50,7 @@ void write_thermodynamic_quantities_temperature_sweep(const char * path,
     fprintf(file_handler, ";L:%d\n", L);
     fprintf(file_handler, ";seed:%u\n", seed);
     fprintf(file_handler, ";grid_npoints:%d\n", grid_npoints);
+    fprintf(file_handler, ";nsamples:%d\n", nsamples);
     fprintf(file_handler, ";nsep:%d\n", nsep);
     fprintf(file_handler, ";date:%s", asctime(localtime(&current_time)));
 
