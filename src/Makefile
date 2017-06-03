@@ -1,37 +1,36 @@
-.PHONY: default help object executable all clean
+.PHONY: default all clean distclean temperature_sweep outputdir
+
 CC = gcc
 
 LD = $(CC)
 
-SOURCE_C = $(wildcard *.c)
-OBJECTS_C = $(patsubst %.c, %.o, $(SOURCE_C))
-
 CFLAGS = -std=c99 -Wall -pedantic -O3
 LDFLAGS = -lm
-EXECUTABLE = ../bin/ising.e
+
+SRCS_TSWEEP = ising_temperature_sweep.c
+OBJS_TSWEEP = $(subst .c,.o,$(SRCS_TSWEEP))
+
+SRCS_COMMON = $(filter-out $(SRCS_TSWEEP), $(wildcard *.c))
+OBJS_COMMON = $(subst .c,.o,$(SRCS_COMMON))
+
+OUTDIR = ../bin
+TARGET_TSWEEP = $(OUTDIR)/ising_temperature_sweep
 
 default: all
 
-help:
-	@echo "\
-Options:\n\n\
-  make objects:       compiler makes objects for every *.c\n\
-  make executable:    compiler makes executable\n\
-  make all:           build all previous\n\
-  make clean:         delete output files\n\
-  make help:          display this help"
+all: temperature_sweep
 
-objects: $(OBJECTS_C)
-
-executable: $(EXECUTABLE)
-
-all: objects executable
+temperature_sweep: $(OBJS_COMMON) $(OBJS_TSWEEP) outputdir
+	$(CC) -o $(TARGET_TSWEEP) $(OBJS_COMMON) $(OBJS_TSWEEP) $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $^ -o $@
 
-%.e: $(OBJECTS_C)
-	$(LD) $(LDFLAGS) $^ -o $@
+outputdir:
+	@mkdir -p $(OUTDIR)
 
 clean:
-	rm -rfv $(OBJECTS_C) $(EXECUTABLE)
+	$(RM) $(OBJS_COMMON) $(OBJS_TSWEEP)
+
+distclean: clean
+	$(RM) $(TARGET_TSWEEP)
