@@ -24,12 +24,12 @@ int main(int argc, char ** argv)
      * seed: (optional) seed of the random number generator
      * */
     if (argc < 6) {
-        printf("usage: n Tmin Tmax J B npoints nsep nsamples outdir (seed)\n");
+        printf("usage: n Tmin Tmax J B npoints rounding nsep nsamples outdir (seed)\n");
         return 1;
     }
     unsigned int random_seed;
-    if (argc == 11) {
-        random_seed = atoi(argv[10]);
+    if (argc == 12) {
+        random_seed = atoi(argv[11]);
     } else {
         random_seed = (unsigned int)time(NULL);
     }
@@ -42,8 +42,9 @@ int main(int argc, char ** argv)
     Parameters parameters = { .T = atof(argv[2]), .J = atof(argv[4]), .B = atof(argv[5]) };
 
     int npoints = atoi(argv[6]);
-    int nsep = atoi(argv[7]) * n * n;
-    int nsamples = atoi(argv[8]);
+    int rounding = atoi(argv[7]);
+    int nsep = atoi(argv[8]) * n * n;
+    int nsamples = atoi(argv[9]);
     int niter = (nsamples + 1) * nsep;
 
     srand(random_seed);
@@ -57,7 +58,7 @@ int main(int argc, char ** argv)
     double * Mvar = malloc(npoints * sizeof(*Mvar));
     double * Evar = malloc(npoints * sizeof(*Evar));
 
-    double * Tvalues = create_linear_grid(Tmin, Tmax, npoints, 0);
+    double * Tvalues = create_linear_grid(Tmin, Tmax, npoints, rounding);
     for (int i = 0; i < npoints; i++) {
         parameters.T = Tvalues[i];
         calculate_transition_probabilities(&parameters);
