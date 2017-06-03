@@ -34,6 +34,32 @@ void write_lattice_to_file(const char * path, const int * lattice, int L)
     free(file_full_path);
 }
 
+void write_thermodynamic_quantities(const char * path, const double * Mval,
+        const double * Eval, int npoints, int L, double T, unsigned int seed)
+{
+    time_t current_time = time(NULL);
+    char * prefix = "quantities";
+    size_t file_full_path_length = strlen(path) + strlen(prefix) + 160;
+    char * file_full_path = malloc(file_full_path_length * sizeof(*file_full_path));
+    sprintf(file_full_path, "%s/%s_%dx%d_%.*e_%u.csv", path, prefix,
+            L, L, DBL_DIG-1, T, seed);
+
+    FILE * file_handler = fopen(file_full_path, "w");
+    fprintf(file_handler, ";L:%d\n", L);
+    fprintf(file_handler, ";seed:%u\n", seed);
+    fprintf(file_handler, ";npoints:%d\n", npoints);
+    fprintf(file_handler, ";T:%.*e\n", DBL_DIG-1, T);
+    fprintf(file_handler, ";date:%s", asctime(localtime(&current_time)));
+
+    for (int i = 0; i < npoints; i++) {
+        fprintf(file_handler, "%.*e,%.*e\n", DBL_DIG-1, Mval[i],
+                DBL_DIG-1, Eval[i]);
+    }
+
+    fclose(file_handler);
+    free(file_full_path);
+}
+
 void write_thermodynamic_quantities_temperature_sweep(const char * path,
         const double * temperature_grid, int grid_npoints, int nsamples,
         const double * Mavg, const double * Eavg, const double * Mvar,

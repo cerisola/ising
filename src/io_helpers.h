@@ -18,6 +18,22 @@
 */
 void write_lattice_to_file(const char * path, const int * lattice, int L);
 
+/*! Write thermodynamic quantities to file.
+
+    @param path path to the folder where the data will be written. If the file
+        exists it will be overwritten.
+    @param Mval magnetization values.
+    @param Eval energy values.
+    @param npoints number of data points. 
+    @param L the linear size of the lattice.
+    @param T temperature.
+    @param seed the random number generator seed used at the beginning of the
+        probability sweep.
+*/
+void write_thermodynamic_quantities(const char * path, const double * Mval,
+        const double * Eval, int npoints, int L, double T, unsigned int seed);
+
+
 /*! Write thermodynamic quantities statistics obtained in a temperature sweep to file.
 
     @param path path to the folder where the data will be written. If the file
