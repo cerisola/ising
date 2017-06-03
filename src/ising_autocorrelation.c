@@ -52,8 +52,8 @@ int main(int argc, char ** argv)
     double Eavg = 0;
     double * Mval = malloc(nsteps * sizeof(*Mval));
     double * Eval = malloc(nsteps * sizeof(*Eval));
-    double * Mcor = malloc((nsteps + 1) * sizeof(*Mcor));
-    double * Ecor = malloc((nsteps + 1) * sizeof(*Ecor));
+    double * Mcor = malloc(nsteps * sizeof(*Mcor));
+    double * Ecor = malloc(nsteps * sizeof(*Ecor));
 
     calculate_transition_probabilities(&parameters);
     set_thermodynamic_quantities(lattice, n, &parameters, &quantities);
@@ -63,8 +63,6 @@ int main(int argc, char ** argv)
     }
 
     int niter = nsteps * (nsamples + 1);
-    Mcor[nsteps] = 0;
-    Ecor[nsteps] = 0;
     unsigned int accum = 0;
     for (int i = 0; i < niter; i++) {
         metropolis(lattice, n, &parameters, &quantities);
@@ -81,7 +79,7 @@ int main(int argc, char ** argv)
             Eavg += quantities.E;
             Mcor[0] += quantities.M * quantities.M;
             Ecor[0] += quantities.E * quantities.E;
-            for (int j = 1; j < nsteps+1; j++) {
+            for (int j = 1; j < nsteps; j++) {
                 Mcor[j] += Mval[j] * quantities.M;
                 Ecor[j] += Eval[j] * quantities.E;
             }
@@ -100,7 +98,7 @@ int main(int argc, char ** argv)
 
     Mavg = Mavg / accum;
     Eavg = Eavg / accum;
-    for (int i = 0; i < nsteps+1; i++) {
+    for (int i = 0; i < nsteps; i++) {
         Mcor[i] = Mcor[i] / accum - Mavg * Mavg;
         Ecor[i] = Ecor[i] / accum - Eavg * Eavg;
     }

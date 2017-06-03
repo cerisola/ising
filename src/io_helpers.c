@@ -82,7 +82,7 @@ void write_autocorrelation_values(const char * path, const double * Mcor,
     fprintf(file_handler, ";T:%.*e\n", DBL_DIG-1, T);
     fprintf(file_handler, ";date:%s", asctime(localtime(&current_time)));
 
-    for (int i = 0; i < nsteps+1; i++) {
+    for (int i = 0; i < nsteps; i++) {
         fprintf(file_handler, "%.*e,%.*e\n", DBL_DIG-1, Mcor[i], DBL_DIG-1, Ecor[i]);
     }
 
