@@ -73,7 +73,7 @@ int main(int argc, char ** argv)
         for (int j = 0; j < niter; j++) {
             metropolis(lattice, n, &parameters, &quantities);
             if (j > 0 && j % nsep == 0) {
-                Mavg[i] += fabs(quantities.M);
+                Mavg[i] += quantities.M;
                 Eavg[i] += quantities.E;
                 Mvar[i] += quantities.M * quantities.M;
                 Evar[i] += quantities.E * quantities.E;
