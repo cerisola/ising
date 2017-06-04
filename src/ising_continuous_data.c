@@ -19,16 +19,17 @@ int main(int argc, char ** argv)
      * J: spin-spin coupling constant value
      * B: external magnetic field value
      * npoints: number of points to measure
+     * boundary: the type of boundary conditions
      * outdir: output directory where data will be saved
      * seed: (optional) seed of the random number generator
      * */
-    if (argc < 6) {
-        printf("usage: n T J B npoints outdir (seed)\n");
+    if (argc < 8) {
+        printf("usage: n T J B npoints boundary outdir (seed)\n");
         return 1;
     }
     unsigned int random_seed;
-    if (argc == 8) {
-        random_seed = atoi(argv[7]);
+    if (argc == 9) {
+        random_seed = atoi(argv[8]);
     } else {
         random_seed = (unsigned int)time(NULL);
     }
@@ -37,7 +38,7 @@ int main(int argc, char ** argv)
     int * lattice = malloc(n * n * sizeof(int));
 
     double T = atof(argv[2]);
-    Parameters parameters = { .T = T, .J = atof(argv[3]), .B = atof(argv[4]), .boundary_type = Periodic };
+    Parameters parameters = { .T = T, .J = atof(argv[3]), .B = atof(argv[4]), .boundary_type = parse_boundary_type(argv[6]) };
 
     int npoints = atoi(argv[5]);
 
@@ -68,7 +69,7 @@ int main(int argc, char ** argv)
         }
     }
 
-    write_thermodynamic_quantities(argv[6], Mval, Eval, npoints, n, T, random_seed);
+    write_thermodynamic_quantities(argv[7], Mval, Eval, npoints, n, T, random_seed);
 
     free(Mval);
     free(Eval);

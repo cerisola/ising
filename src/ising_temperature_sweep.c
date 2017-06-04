@@ -22,16 +22,17 @@ int main(int argc, char ** argv)
      * npoints: number of points in the temperature interval [Tmin, Tmax]
      * nsep: separation (in units of n^2) between different samples
      * nsamples: number of samples to average at each temperature
+     * boundary: the type of boundary conditions
      * outdir: output directory where data will be saved
      * seed: (optional) seed of the random number generator
      * */
-    if (argc < 6) {
-        printf("usage: n Tmin Tmax J B npoints rounding nsep nsamples outdir (seed)\n");
+    if (argc < 12) {
+        printf("usage: n Tmin Tmax J B npoints rounding nsep nsamples boundary outdir (seed)\n");
         return 1;
     }
     unsigned int random_seed;
-    if (argc == 12) {
-        random_seed = atoi(argv[11]);
+    if (argc == 13) {
+        random_seed = atoi(argv[12]);
     } else {
         random_seed = (unsigned int)time(NULL);
     }
@@ -41,7 +42,7 @@ int main(int argc, char ** argv)
 
     double Tmin = atof(argv[2]);
     double Tmax = atof(argv[3]);
-    Parameters parameters = { .T = Tmax, .J = atof(argv[4]), .B = atof(argv[5]), .boundary_type = Periodic };
+    Parameters parameters = { .T = Tmax, .J = atof(argv[4]), .B = atof(argv[5]), .boundary_type = parse_boundary_type(argv[10]) };
 
     int npoints = atoi(argv[6]);
     int rounding = atoi(argv[7]);
@@ -93,7 +94,7 @@ int main(int argc, char ** argv)
         }
     }
 
-    write_thermodynamic_quantities_temperature_sweep(argv[10],
+    write_thermodynamic_quantities_temperature_sweep(argv[11],
             Tvalues, npoints, nsamples, Mavg, Eavg, Mvar, Evar, nsep, n,
             random_seed);
 

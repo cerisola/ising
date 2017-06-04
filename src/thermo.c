@@ -1,6 +1,18 @@
 #include "thermo.h"
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
+
+BoundaryConditionsType parse_boundary_type(const char * type)
+{
+    if (strcmp(type, "periodic") == 0) {
+        return Periodic;
+    } else if (strcmp(type, "fixed") == 0) {
+        return Fixed;
+    } else {
+        return Periodic;
+    }
+}
 
 int sum_neighbours_for_boundary_conditions(const int * lattice, int n, int site, BoundaryConditionsType boundary_type)
 {

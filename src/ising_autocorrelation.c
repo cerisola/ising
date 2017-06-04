@@ -20,16 +20,17 @@ int main(int argc, char ** argv)
      * B: external magnetic field value
      * nsteps: maximum number of steps to measure correlation
      * nsamples: number of samples to calculate correlation averages
+     * boundary: the type of boundary conditions
      * outdir: output directory where data will be saved
      * seed: (optional) seed of the random number generator
     */
-    if (argc < 6) {
-        printf("usage: n T J B nsteps nsamples outdir (seed)\n");
+    if (argc < 9) {
+        printf("usage: n T J B nsteps nsamples boundary outdir (seed)\n");
         return 1;
     }
     unsigned int random_seed;
-    if (argc == 9) {
-        random_seed = atoi(argv[8]);
+    if (argc == 10) {
+        random_seed = atoi(argv[9]);
     } else {
         random_seed = (unsigned int)time(NULL);
     }
@@ -38,7 +39,7 @@ int main(int argc, char ** argv)
     int * lattice = malloc(n * n * sizeof(int));
 
     double T = atof(argv[2]);
-    Parameters parameters = { .T = T, .J = atof(argv[3]), .B = atof(argv[4]), .boundary_type = Periodic };
+    Parameters parameters = { .T = T, .J = atof(argv[3]), .B = atof(argv[4]), .boundary_type = parse_boundary_type(argv[7]) };
 
     int nsteps = atoi(argv[5]);
     int nsamples = atoi(argv[6]);
@@ -103,7 +104,7 @@ int main(int argc, char ** argv)
         Ecor[i] = Ecor[i] / accum - Eavg * Eavg;
     }
 
-    write_autocorrelation_values(argv[7], Mcor, Ecor, nsteps, nsamples, T, n, random_seed);
+    write_autocorrelation_values(argv[8], Mcor, Ecor, nsteps, nsamples, T, n, random_seed);
 
     free(Mval);
     free(Eval);
