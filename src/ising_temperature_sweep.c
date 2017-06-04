@@ -85,12 +85,12 @@ int main(int argc, char ** argv)
                 update_online_mean_variance(quantities.E, j / nsep, Eavg + i, Evar + i);
             }
         }
-        Mavg[i] /= nsamples;
-        Eavg[i] /= nsamples;
         Mvar[i] /= nsamples - 1;
         Evar[i] /= nsamples - 1;
 
-        printf("Finished T_%d out of %d\n", j+1, npoints);
+        if (j > 0 && j % (npoints/10) == 0) {
+            printf("Finished T_%d out of %d\n", j+1, npoints);
+        }
     }
 
     write_thermodynamic_quantities_temperature_sweep(argv[10],
