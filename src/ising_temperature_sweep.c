@@ -68,6 +68,8 @@ int main(int argc, char ** argv)
     }
 
     double * Tvalues = create_linear_grid(Tmin, Tmax, npoints, rounding);
+    double * Eval = malloc(nsamples * sizeof(*Eval));
+    double * Mval = malloc(nsamples * sizeof(*Mval));
     for (int j = 0; j < npoints; j++) {
         int i = npoints - 1 - j;
         parameters.T = Tvalues[i];
@@ -83,6 +85,8 @@ int main(int argc, char ** argv)
             if (j > 0 && j % nsep == 0) {
                 update_online_mean_variance(quantities.M, j / nsep, Mavg + i, Mvar + i);
                 update_online_mean_variance(quantities.E, j / nsep, Eavg + i, Evar + i);
+                Mval[j / nsep - 1] = quantities.M;
+                Eval[j / nsep - 1] = quantities.E;
             }
         }
         Mvar[i] /= nsamples - 1;
@@ -91,6 +95,8 @@ int main(int argc, char ** argv)
         if (j > 0 && j % (npoints/10) == 0) {
             printf("Finished T_%d out of %d\n", j+1, npoints);
         }
+
+        write_thermodynamic_quantities(argv[10], Mval, Eval, nsamples, n, &parameters, random_seed);
     }
 
     write_thermodynamic_quantities_temperature_sweep(argv[10],
@@ -101,6 +107,8 @@ int main(int argc, char ** argv)
     free(Eavg);
     free(Mvar);
     free(Evar);
+    free(Mval);
+    free(Eval);
     free(Tvalues);
     free(lattice);
 
