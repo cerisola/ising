@@ -95,7 +95,7 @@ int main(int argc, char ** argv)
 
     write_thermodynamic_quantities_temperature_sweep(argv[10],
             Tvalues, npoints, nsamples, Mavg, Eavg, Mvar, Evar, nsep, n,
-            random_seed);
+            &parameters, random_seed);
 
     free(Mavg);
     free(Eavg);

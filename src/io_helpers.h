@@ -9,6 +9,8 @@
 #ifndef IO_HELPERS_H
 #define IO_HELPERS_H
 
+#include "thermo.h"
+
 /*! Write lattice to file.
 
     @param path path to the folder were the lattice will be written. If the file
@@ -26,13 +28,13 @@ void write_lattice_to_file(const char * path, const int * lattice, int L);
     @param Eval energy values.
     @param npoints number of data points. 
     @param L the linear size of the lattice.
-    @param T temperature.
+    @param parameters struct with system parameters.
     @param seed the random number generator seed used at the beginning of the
         probability sweep.
 */
 void write_thermodynamic_quantities(const char * path, const double * Mval,
-        const double * Eval, int npoints, int L, double T, unsigned int seed);
-
+        const double * Eval, int npoints, int L, const Parameters * parameters,
+        unsigned int seed);
 
 /*! Write thermodynamic quantities statistics obtained in a temperature sweep to file.
 
@@ -47,13 +49,15 @@ void write_thermodynamic_quantities(const char * path, const double * Mval,
     @param Evar variance of the energy of each temperature.
     @param nsep separation of the samples (in units of Metropolis steps).
     @param L the linear size of the lattice.
+    @param parameters struct with system parameters.
     @param seed the random number generator seed used at the beginning of the
         probability sweep.
 */
 void write_thermodynamic_quantities_temperature_sweep(const char * path,
         const double * temperature_grid, int grid_npoints, int nsamples,
         const double * Mavg, const double * Eavg, const double * Mvar,
-        const double * Evar, int nsep, int L, unsigned int seed);
+        const double * Evar, int nsep, int L, const Parameters * parameters,
+        unsigned int seed);
 
 /*! Write autocorrelation values to file.
 
@@ -63,13 +67,13 @@ void write_thermodynamic_quantities_temperature_sweep(const char * path,
     @param Ecor autocorrelation values of the energy.
     @param nsteps maximum number of steps used to calculate the autocorrelation.
     @param nsamples the number of samples taken at each step separation.
-    @param T temperature used.
     @param L the linear size of the lattice.
+    @param parameters struct with system parameters.
     @param seed the random number generator seed used at the beginning of the
         probability sweep.
 */
 void write_autocorrelation_values(const char * path, const double * Mcor,
-        const double * Ecor, int nsteps, int nsamples, double T, int L,
-        unsigned int seed);
+        const double * Ecor, int nsteps, int nsamples, int L,
+        const Parameters * parameters, unsigned int seed);
 
 #endif /* IO_HELPERS_H */
