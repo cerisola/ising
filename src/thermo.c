@@ -2,6 +2,16 @@
 #include <stdlib.h>
 #include <math.h>
 
+int sum_neighbours_for_boundary_conditions(const int * lattice, int n, int site, BoundaryConditionsType boundary_type)
+{
+    switch (boundary_type) {
+    case Periodic:
+        return sum_neighbours_periodic_boundary_conditions(lattice, n, site);
+    default:
+        return sum_neighbours_periodic_boundary_conditions(lattice, n, site);
+    }
+}
+
 int sum_neighbours_periodic_boundary_conditions(const int * lattice, int n, int site)
 {
     int i = site / n;
@@ -49,7 +59,7 @@ double magnetization(const int *lattice, int n)
 
 int site_interaction_energy(int site, const int * lattice, int n, const Parameters * parameters)
 {
-    int sum_neighbours = sum_neighbours_periodic_boundary_conditions(lattice, n, site);
+    int sum_neighbours = sum_neighbours_for_boundary_conditions(lattice, n, site, parameters->boundary_type);
     int siteE = - parameters->J * sum_neighbours * lattice[site];
     return siteE;
 }

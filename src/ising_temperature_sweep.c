@@ -41,7 +41,7 @@ int main(int argc, char ** argv)
 
     double Tmin = atof(argv[2]);
     double Tmax = atof(argv[3]);
-    Parameters parameters = { .T = Tmax, .J = atof(argv[4]), .B = atof(argv[5]) };
+    Parameters parameters = { .T = Tmax, .J = atof(argv[4]), .B = atof(argv[5]), .boundary_type = Periodic };
 
     int npoints = atoi(argv[6]);
     int rounding = atoi(argv[7]);

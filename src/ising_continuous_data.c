@@ -37,7 +37,7 @@ int main(int argc, char ** argv)
     int * lattice = malloc(n * n * sizeof(int));
 
     double T = atof(argv[2]);
-    Parameters parameters = { .T = T, .J = atof(argv[3]), .B = atof(argv[4]) };
+    Parameters parameters = { .T = T, .J = atof(argv[3]), .B = atof(argv[4]), .boundary_type = Periodic };
 
     int npoints = atoi(argv[5]);
 

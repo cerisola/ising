@@ -1,6 +1,11 @@
 #ifndef THERMO_H
 #define THERMO_H
 
+typedef enum {
+    Periodic
+} BoundaryConditionsType;
+
+int sum_neighbours_for_boundary_conditions(const int * lattice, int n, int site, BoundaryConditionsType boundary_type);
 int sum_neighbours_periodic_boundary_conditions(const int * lattice, int n, int site);
 
 typedef struct {
@@ -8,6 +13,7 @@ typedef struct {
     double J;
     double B;
     double transition_probabilities[2][5];
+    BoundaryConditionsType boundary_type;
 } Parameters;
 
 int calculate_transition_probabilities(Parameters * parameters);
