@@ -2,11 +2,13 @@
 #define THERMO_H
 
 typedef enum {
-    Periodic
+    Periodic,
+    Fixed
 } BoundaryConditionsType;
 
 int sum_neighbours_for_boundary_conditions(const int * lattice, int n, int site, BoundaryConditionsType boundary_type);
 int sum_neighbours_periodic_boundary_conditions(const int * lattice, int n, int site);
+int sum_neighbours_fixed_boundary_conditions(const int * lattice, int n, int site);
 
 typedef struct {
     double T;

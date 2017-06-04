@@ -7,6 +7,8 @@ int sum_neighbours_for_boundary_conditions(const int * lattice, int n, int site,
     switch (boundary_type) {
     case Periodic:
         return sum_neighbours_periodic_boundary_conditions(lattice, n, site);
+    case Fixed:
+        return sum_neighbours_fixed_boundary_conditions(lattice, n, site);
     default:
         return sum_neighbours_periodic_boundary_conditions(lattice, n, site);
     }
@@ -21,6 +23,17 @@ int sum_neighbours_periodic_boundary_conditions(const int * lattice, int n, int 
                          lattice[i*n + ((j+1) % n)] +
                          lattice[i*n + ((j-1+n) % n)];
     return sum_neighbours;
+}
+
+int sum_neighbours_fixed_boundary_conditions(const int * lattice, int n, int site)
+{
+    int i = site / n;
+    int j = site % n;
+    int up = i == 0 ? 1 : lattice[(i-1)*n + j];
+    int down = i == n - 1 ? 1 : lattice[(i+1)*n + j];
+    int left = j == 0 ? 1 : lattice[i*n + (j-1)];
+    int right = j == n - 1 ? 1 : lattice[i*n + (j+1)];
+    return up + down + left + right;
 }
 
 int calculate_transition_probabilities(Parameters * parameters)
