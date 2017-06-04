@@ -85,8 +85,6 @@ int main(int argc, char ** argv)
                 update_online_mean_variance(quantities.E, j / nsep, Eavg + i, Evar + i);
             }
         }
-        Mavg[i] /= nsamples;
-        Eavg[i] /= nsamples;
         Mvar[i] /= nsamples - 1;
         Evar[i] /= nsamples - 1;
 
