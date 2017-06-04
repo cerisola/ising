@@ -25,7 +25,7 @@ int main(int argc, char ** argv)
      * outdir: output directory where data will be saved
      * seed: (optional) seed of the random number generator
      * */
-    if (argc < 6) {
+    if (argc < 11) {
         printf("usage: n Tmin Tmax J B npoints rounding nsep nsamples outdir (seed)\n");
         return 1;
     }
