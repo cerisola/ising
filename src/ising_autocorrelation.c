@@ -104,7 +104,7 @@ int main(int argc, char ** argv)
         Ecor[i] = Ecor[i] / accum - Eavg * Eavg;
     }
 
-    write_autocorrelation_values(argv[8], Mcor, Ecor, nsteps, nsamples, T, n, random_seed);
+    write_autocorrelation_values(argv[8], Mcor, Ecor, nsteps, nsamples, n, &parameters, random_seed);
 
     free(Mval);
     free(Eval);
