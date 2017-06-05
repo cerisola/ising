@@ -56,11 +56,15 @@ int main(int argc, char ** argv)
     double * Mcor = malloc(nsteps * sizeof(*Mcor));
     double * Ecor = malloc(nsteps * sizeof(*Ecor));
 
-    calculate_transition_probabilities(&parameters);
-    set_thermodynamic_quantities(lattice, n, &parameters, &quantities);
+    int nadiabatic_steps = 100;
     int ntherm = 100 * n * n;
-    for (int i = 0; i < ntherm; i++) {
-        metropolis(lattice, n, &parameters, &quantities);
+    for (int i = 0; i < nadiabatic_steps; i++) {
+        parameters.T = (nadiabatic_steps - i) * T;
+        calculate_transition_probabilities(&parameters);
+        set_thermodynamic_quantities(lattice, n, &parameters, &quantities);
+        for (int i = 0; i < ntherm; i++) {
+            metropolis(lattice, n, &parameters, &quantities);
+        }
     }
 
     for (int i = 0; i < nsteps; i++) {
