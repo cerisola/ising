@@ -76,20 +76,20 @@ int main(int argc, char ** argv)
         metropolis(lattice, n, &parameters, &quantities);
 
         accum++;
-        Mavg += quantities.M;
+        Mavg += fabs(quantities.M);
         Eavg += quantities.E;
-        Mcor[0] += quantities.M * quantities.M;
-        Ecor[0] += quantities.E * quantities.E;
-        for (int j = 1; j < nsteps; j++) {
-            Mcor[j] += Mval[j] * quantities.M;
-            Ecor[j] += Eval[j] * quantities.E;
-        }
+
         for (int j = 0; j < nsteps-1; j++) {
             Mval[j] = Mval[j+1];
             Eval[j] = Eval[j+1];
         }
         Mval[nsteps-1] = quantities.M;
         Eval[nsteps-1] = quantities.E;
+
+        for (int j = 0; j < nsteps; j++) {
+            Mcor[j] += fabs(Mval[j] * quantities.M);
+            Ecor[j] += Eval[j] * quantities.E;
+        }
 
         if (i > 0 && i % (nsamples/100) == 0) {
             printf("Finished iter %d out of %d\n", i+1, nsamples);
