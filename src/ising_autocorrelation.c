@@ -80,8 +80,10 @@ int main(int argc, char ** argv)
         metropolis(lattice, n, &parameters, &quantities);
 
         accum++;
-        Mavg += fabs(quantities.M);
-        Eavg += quantities.E;
+        double deltaM = fabs(quantities.M) - Mavg;
+        double deltaE = quantities.E - Eavg;
+        Mavg += deltaM / accum;
+        Eavg += deltaE / accum;
 
         for (int j = 0; j < nsteps-1; j++) {
             Mval[j] = Mval[j+1];
@@ -91,8 +93,10 @@ int main(int argc, char ** argv)
         Eval[nsteps-1] = quantities.E;
 
         for (int j = 0; j < nsteps; j++) {
-            Mcor[j] += fabs(Mval[j] * quantities.M);
-            Ecor[j] += Eval[j] * quantities.E;
+            double deltaM2 = fabs(Mval[j]) - Mavg;
+            double deltaE2 = Eval[j] - Eavg;
+            Mcor[j] += deltaM * deltaM2;
+            Ecor[j] += deltaE * deltaE2;
         }
 
         if (i > 0 && i % (nsamples/100) == 0) {
@@ -100,11 +104,9 @@ int main(int argc, char ** argv)
         }
     }
 
-    Mavg = Mavg / accum;
-    Eavg = Eavg / accum;
     for (int i = 0; i < nsteps; i++) {
-        Mcor[i] = Mcor[i] / accum - Mavg * Mavg;
-        Ecor[i] = Ecor[i] / accum - Eavg * Eavg;
+        Mcor[i] = Mcor[i] / accum;
+        Ecor[i] = Ecor[i] / accum;
     }
 
     write_autocorrelation_values(argv[7], Mcor, Ecor, nsteps, nsamples, n, &parameters, random_seed);
