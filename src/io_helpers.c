@@ -35,8 +35,8 @@ void write_lattice_to_file(const char * path, const int * lattice, int L)
 }
 
 void write_thermodynamic_quantities(const char * path, const double * Mval,
-        const double * Eval, int npoints, int L, const Parameters * parameters,
-        unsigned int seed)
+        const double * Eval, const double * Aux, int npoints, int L,
+        const Parameters * parameters, unsigned int seed)
 {
     time_t current_time = time(NULL);
     char * prefix = "quantities";
@@ -55,8 +55,13 @@ void write_thermodynamic_quantities(const char * path, const double * Mval,
     fprintf(file_handler, ";date:%s", asctime(localtime(&current_time)));
 
     for (int i = 0; i < npoints; i++) {
-        fprintf(file_handler, "%.*e,%.*e\n", DBL_DIG-1, Mval[i],
-                DBL_DIG-1, Eval[i]);
+        if (Aux == NULL) {
+            fprintf(file_handler, "%.*e,%.*e\n", DBL_DIG-1, Mval[i],
+                    DBL_DIG-1, Eval[i]);
+        } else {
+            fprintf(file_handler, "%.*e,%.*e,%.*e\n", DBL_DIG-1, Mval[i],
+                    DBL_DIG-1, Eval[i], DBL_DIG-1, Aux[i]);
+        }
     }
 
     fclose(file_handler);
@@ -66,8 +71,8 @@ void write_thermodynamic_quantities(const char * path, const double * Mval,
 void write_thermodynamic_quantities_temperature_sweep(const char * path,
         const double * temperature_grid, int grid_npoints, int nsamples,
         const double * Mavg, const double * Eavg, const double * Mvar,
-        const double * Evar, int nsep, int L, const Parameters * parameters,
-        unsigned int seed)
+        const double * Evar, const double * Aavg, const double * Avar,
+        int nsep, int L, const Parameters * parameters, unsigned int seed)
 {
     time_t current_time = time(NULL);
     char * prefix = "temperature_sweep";
@@ -87,8 +92,16 @@ void write_thermodynamic_quantities_temperature_sweep(const char * path,
     fprintf(file_handler, ";date:%s", asctime(localtime(&current_time)));
 
     for (int i = 0; i < grid_npoints; i++) {
-        fprintf(file_handler, "%.*e,%.*e,%.*e,%.*e,%.*e\n", DBL_DIG-1, temperature_grid[i],
-                DBL_DIG-1, Mavg[i], DBL_DIG-1, Eavg[i], DBL_DIG-1, Mvar[i], DBL_DIG-1, Evar[i]);
+        if (Aavg == NULL || Avar == NULL) {
+            fprintf(file_handler, "%.*e,%.*e,%.*e,%.*e,%.*e\n",
+                    DBL_DIG-1, temperature_grid[i], DBL_DIG-1, Mavg[i],
+                    DBL_DIG-1, Eavg[i], DBL_DIG-1, Mvar[i], DBL_DIG-1, Evar[i]);
+        } else {
+            fprintf(file_handler, "%.*e,%.*e,%.*e,%.*e,%.*e,%.*e,%.*e\n",
+                    DBL_DIG-1, temperature_grid[i], DBL_DIG-1, Mavg[i],
+                    DBL_DIG-1, Eavg[i], DBL_DIG-1, Mvar[i], DBL_DIG-1, Evar[i],
+                    DBL_DIG-1, Aavg[i], DBL_DIG-1, Avar[i]);
+        }
     }
 
     fclose(file_handler);

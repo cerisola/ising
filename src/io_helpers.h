@@ -26,6 +26,8 @@ void write_lattice_to_file(const char * path, const int * lattice, int L);
         exists it will be overwritten.
     @param Mval magnetization values.
     @param Eval energy values.
+    @param Aux auxilliary additional magnitude to be saved. Pass NULL if no
+        extra data should be saved.
     @param npoints number of data points. 
     @param L the linear size of the lattice.
     @param parameters struct with system parameters.
@@ -33,8 +35,8 @@ void write_lattice_to_file(const char * path, const int * lattice, int L);
         probability sweep.
 */
 void write_thermodynamic_quantities(const char * path, const double * Mval,
-        const double * Eval, int npoints, int L, const Parameters * parameters,
-        unsigned int seed);
+        const double * Eval, const double * Aux, int npoints, int L,
+        const Parameters * parameters, unsigned int seed);
 
 /*! Write thermodynamic quantities statistics obtained in a temperature sweep to file.
 
@@ -47,6 +49,10 @@ void write_thermodynamic_quantities(const char * path, const double * Mval,
     @param Eavg average values of the energy for each temperature.
     @param Mvar variance of the magnetization for each temperature.
     @param Evar variance of the energy of each temperature.
+    @param Aavg average values of an additional auxilliarry magnitude. Pass
+        NULL if none is desired to be saved.
+    @param Avar variance of an additional auxilliary magnitude. Pass NULL if
+        non is desired to be saved.
     @param nsep separation of the samples (in units of Metropolis steps).
     @param L the linear size of the lattice.
     @param parameters struct with system parameters.
@@ -56,8 +62,8 @@ void write_thermodynamic_quantities(const char * path, const double * Mval,
 void write_thermodynamic_quantities_temperature_sweep(const char * path,
         const double * temperature_grid, int grid_npoints, int nsamples,
         const double * Mavg, const double * Eavg, const double * Mvar,
-        const double * Evar, int nsep, int L, const Parameters * parameters,
-        unsigned int seed);
+        const double * Evar, const double * Aavg, const double * Avar,
+        int nsep, int L, const Parameters * parameters, unsigned int seed);
 
 /*! Write autocorrelation values to file.
 

@@ -80,7 +80,7 @@ int main(int argc, char ** argv)
         }
     }
 
-    write_thermodynamic_quantities(argv[7], Mval, Eval, data_size, n, &parameters, random_seed);
+    write_thermodynamic_quantities(argv[7], Mval, Eval, NULL, data_size, n, &parameters, random_seed);
 
     free(Mval);
     free(Eval);
