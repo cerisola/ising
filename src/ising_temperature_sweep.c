@@ -80,13 +80,24 @@ int main(int argc, char ** argv)
         Eavg[i] = 0;
         Mvar[i] = 0;
         Evar[i] = 0;
+        double m = 0;
+        double e = 0;
+        int count = 0;
         for (int j = 0; j < niter; j++) {
             metropolis(lattice, n, &parameters, &quantities);
+            m += quantities.M;
+            e += quantities.E;
+            count++;
             if (j > 0 && j % nsep == 0) {
-                update_online_mean_variance(quantities.M, j / nsep, Mavg + i, Mvar + i);
-                update_online_mean_variance(quantities.E, j / nsep, Eavg + i, Evar + i);
-                Mval[j / nsep - 1] = quantities.M;
-                Eval[j / nsep - 1] = quantities.E;
+                m /= count;
+                e /= count;
+                update_online_mean_variance(m, j / nsep, Mavg + i, Mvar + i);
+                update_online_mean_variance(e, j / nsep, Eavg + i, Evar + i);
+                Mval[j / nsep - 1] = m;
+                Eval[j / nsep - 1] = e;
+                m = 0;
+                e = 0;
+                count = 0;
             }
         }
         Mvar[i] /= nsamples - 1;
