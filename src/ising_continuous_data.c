@@ -19,16 +19,17 @@ int main(int argc, char ** argv)
      * J: spin-spin coupling constant value
      * B: external magnetic field value
      * npoints: number of points to measure
+     * nsep: separation between samples (in units of n^2)
      * outdir: output directory where data will be saved
      * seed: (optional) seed of the random number generator
      * */
-    if (argc < 7) {
-        printf("usage: n T J B npoints outdir (seed)\n");
+    if (argc < 8) {
+        printf("usage: n T J B npoints nsep outdir (seed)\n");
         return 1;
     }
     unsigned int random_seed;
-    if (argc == 8) {
-        random_seed = atoi(argv[7]);
+    if (argc == 9) {
+        random_seed = atoi(argv[8]);
     } else {
         random_seed = (unsigned int)time(NULL);
     }
@@ -39,7 +40,11 @@ int main(int argc, char ** argv)
     double T = atof(argv[2]);
     Parameters parameters = { .T = T, .J = atof(argv[3]), .B = atof(argv[4]) };
 
-    int npoints = atoi(argv[5]);
+    unsigned int npoints = atoi(argv[5]);
+    unsigned int nsep = atoi(argv[6]);
+    if (nsep == 0) {
+        nsep = 1;
+    }
 
     pcg32_srand(random_seed);
 
@@ -47,32 +52,35 @@ int main(int argc, char ** argv)
     fill_lattice(lattice, n, prob);
 
     ThermodynamicQuantities quantities;
-    double * Mval = malloc(npoints * sizeof(*Mval));
-    double * Eval = malloc(npoints * sizeof(*Eval));
+    unsigned int data_size = npoints / nsep;
+    double * Mval = malloc(data_size * sizeof(*Mval));
+    double * Eval = malloc(data_size * sizeof(*Eval));
 
-    int nadiabatic_steps = 100;
+    int nadiabatic_steps = 200;
     int ntherm = 100 * n * n;
-    for (int i = 0; i < nadiabatic_steps; i++) {
+    for (unsigned int i = 0; i < nadiabatic_steps; i++) {
         parameters.T = (nadiabatic_steps - i) * T;
         calculate_transition_probabilities(&parameters);
         set_thermodynamic_quantities(lattice, n, &parameters, &quantities);
-        for (int i = 0; i < ntherm; i++) {
+        for (unsigned int i = 0; i < ntherm; i++) {
             metropolis(lattice, n, &parameters, &quantities);
         }
     }
 
-    for (int i = 0; i < npoints; i++) {
+    for (unsigned int i = 0; i < npoints; i++) {
         metropolis(lattice, n, &parameters, &quantities);
 
-        Mval[i] = quantities.M;
-        Eval[i] = quantities.E;
+        if (i % nsep == 0) {
+            Mval[i/nsep] = quantities.M;
+            Eval[i/nsep] = quantities.E;
+        }
 
-        if (i > 0 && i % (npoints/100) == 0) {
+        if (i > 0 && i % (npoints/10) == 0) {
             printf("Finished iter %d out of %d\n", i+1, npoints);
         }
     }
 
-    write_thermodynamic_quantities(argv[6], Mval, Eval, npoints, n, &parameters, random_seed);
+    write_thermodynamic_quantities(argv[7], Mval, Eval, data_size, n, &parameters, random_seed);
 
     free(Mval);
     free(Eval);
